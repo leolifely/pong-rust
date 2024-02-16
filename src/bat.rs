@@ -32,6 +32,12 @@ impl Bat {
 		}
 	}
 
+	pub(crate) fn draw(&self, canvas: &mut sdl2::render::Canvas<sdl2::video::Window>) {
+		canvas.set_draw_color(self.colour);
+		let bat_rect = sdl2::rect::Rect::new(self.position[0], self.position[1], 25, 100);
+		canvas.fill_rect(bat_rect).unwrap();
+	}
+
 	pub fn get_position(&self) -> [i32; 2] {
 		self.position
 	}
