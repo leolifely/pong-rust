@@ -7,14 +7,16 @@ pub enum Direction {
 
 pub struct Bat {
 	position: [i32; 2],
+	size: [i32; 2],
 	direction: Direction,
 	colour: sdl2::pixels::Color,
 }
 
 impl Bat {
-	pub fn new(position: [i32; 2], colour: sdl2::pixels::Color) -> Bat {
+	pub fn new(position: [i32; 2], size: [i32; 2], colour: sdl2::pixels::Color) -> Bat {
 		Bat {
 			position,
+			size,
 			direction: Direction::Stationary,
 			colour,
 		}
@@ -34,7 +36,7 @@ impl Bat {
 
 	pub fn draw(&self, canvas: &mut sdl2::render::Canvas<sdl2::video::Window>) {
 		canvas.set_draw_color(self.colour);
-		let bat_rect = sdl2::rect::Rect::new(self.position[0], self.position[1], 25, 100);
+		let bat_rect = sdl2::rect::Rect::new(self.position[0], self.position[1], self.size[0] as u32, self.size[1] as u32);
 		canvas.fill_rect(bat_rect).unwrap();
 	}
 

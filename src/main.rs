@@ -1,5 +1,8 @@
 mod bat;
+mod ball;
+
 use bat::{Bat, Direction};
+use ball::{Ball, Collision};
 extern crate sdl2;
 use sdl2::{pixels::Color, event::Event, keyboard::Keycode};
 const SCREEN_SIZE: [i32; 2] = [1280, 720];
@@ -19,8 +22,9 @@ fn main() {
 	canvas.present();
 
 	let mut event_pump = sdl_context.event_pump().unwrap();
-	let mut bat_1 = Bat::new([50, 25], Color::RGB(0, 255, 0));
-	let mut bat_2 = Bat::new([SCREEN_SIZE[0] - 75, 25], Color::RGB(255, 255, 255));
+	let mut bat_1 = Bat::new([50, 25], [25, 100], Color::RGB(0, 255, 0));
+	let mut bat_2 = Bat::new([SCREEN_SIZE[0] - 75, 25], [25, 100], Color::RGB(255, 255, 255));
+	let mut ball = Ball::new([SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2], [0, 0], Color::RGB(255, 255, 0));
 
 	'running: loop {
 		for event in event_pump.poll_iter() {
@@ -29,31 +33,33 @@ fn main() {
 					break 'running
 				},
 				Event::KeyDown {keycode: Some(Keycode::Up), ..} => {
-					bat_1.change_direction(Direction::Up);
-				},
-				Event::KeyDown {keycode: Some(Keycode::Down), ..} => {
-					bat_1.change_direction(Direction::Down);
-				},
-				Event::KeyUp {keycode: Some(Keycode::Up), ..} | Event::KeyUp {keycode: Some(Keycode::Down), ..} => {
-					bat_1.change_direction(Direction::Stationary);
-				},
-				Event::KeyDown {keycode: Some(Keycode::W), ..} => {
 					bat_2.change_direction(Direction::Up);
 				},
-				Event::KeyDown {keycode: Some(Keycode::S), ..} => {
+				Event::KeyDown {keycode: Some(Keycode::Down), ..} => {
 					bat_2.change_direction(Direction::Down);
 				},
-				Event::KeyUp {keycode: Some(Keycode::W), ..} | Event::KeyUp {keycode: Some(Keycode::S), ..} => {
+				Event::KeyUp {keycode: Some(Keycode::Up), ..} | Event::KeyUp {keycode: Some(Keycode::Down), ..} => {
 					bat_2.change_direction(Direction::Stationary);
+				},
+				Event::KeyDown {keycode: Some(Keycode::W), ..} => {
+					bat_1.change_direction(Direction::Up);
+				},
+				Event::KeyDown {keycode: Some(Keycode::S), ..} => {
+					bat_1.change_direction(Direction::Down);
+				},
+				Event::KeyUp {keycode: Some(Keycode::W), ..} | Event::KeyUp {keycode: Some(Keycode::S), ..} => {
+					bat_1.change_direction(Direction::Stationary);
 				},
 				_ => {},
 			}
 		}
 		bat_1.move_bat();
 		bat_2.move_bat();
+		ball.move_ball();
 
 		bat_1.draw(&mut canvas);
 		bat_2.draw(&mut canvas);
+		ball.draw(&mut canvas);
 		canvas.present();
 		canvas.set_draw_color(Color::RGB(0, 0, 0));
 		canvas.clear();
