@@ -21,12 +21,10 @@ impl Bat {
 	}
 
 	pub fn change_direction(&mut self, direction: Direction) {
-		println!("Changing direction to {:?}", direction);
 		self.direction = direction;
 	}
 
 	pub fn move_bat(&mut self) {
-		println!("{:?}", self.direction);
 		match self.direction {
 			Direction::Up => self.position[1] -= 1,
 			Direction::Down => self.position[1] += 1,

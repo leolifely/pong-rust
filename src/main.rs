@@ -38,11 +38,9 @@ fn main() {
 					bat_1.change_direction(Direction::Stationary);
 				},
 				Event::KeyDown {keycode: Some(Keycode::W), ..} => {
-					println!("W pressed");
 					bat_2.change_direction(Direction::Up);
 				},
 				Event::KeyDown {keycode: Some(Keycode::S), ..} => {
-					println!("S pressed");
 					bat_2.change_direction(Direction::Down);
 				},
 				Event::KeyUp {keycode: Some(Keycode::W), ..} | Event::KeyUp {keycode: Some(Keycode::S), ..} => {
