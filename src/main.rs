@@ -5,6 +5,8 @@ use bat::{Bat, Direction};
 use ball::{Ball, Collision};
 extern crate sdl2;
 use sdl2::{pixels::Color, event::Event, keyboard::Keycode};
+use std::time::{Duration, SystemTime};
+
 const SCREEN_SIZE: [i32; 2] = [1280, 720];
 
 fn main() {
@@ -24,8 +26,9 @@ fn main() {
 	let mut event_pump = sdl_context.event_pump().unwrap();
 	let mut bat_1 = Bat::new([50, 25], [25, 100], Color::RGB(0, 255, 0));
 	let mut bat_2 = Bat::new([SCREEN_SIZE[0] - 75, 25], [25, 100], Color::RGB(255, 255, 255));
-	let mut ball = Ball::new([SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2], [0, 0], Color::RGB(255, 255, 0));
+	let mut ball = Ball::new([SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2], [1, 0], Color::RGB(255, 255, 0));
 
+	let mut now = SystemTime::now();
 	'running: loop {
 		for event in event_pump.poll_iter() {
 			match event {
@@ -53,9 +56,13 @@ fn main() {
 				_ => {},
 			}
 		}
-		bat_1.move_bat();
-		bat_2.move_bat();
-		ball.move_ball();
+		if now.elapsed().unwrap().as_millis() > 1 {
+			bat_1.move_bat();
+			bat_2.move_bat();
+			ball.move_ball();
+			println!("{:?}", ball.test_collision(&bat_1, &bat_2, SCREEN_SIZE));
+			now = SystemTime::now();
+		}
 
 		bat_1.draw(&mut canvas);
 		bat_2.draw(&mut canvas);
