@@ -46,14 +46,9 @@ fn main() {
 					bat_2.change_direction(Direction::Down);
 				},
 				Event::KeyUp {keycode: Some(Keycode::W), ..} | Event::KeyUp {keycode: Some(Keycode::S), ..} => {
-					println!("W or S released");
 					bat_2.change_direction(Direction::Stationary);
 				},
-				_ => {
-					bat_1.change_direction(Direction::Stationary);
-					bat_2.change_direction(Direction::Stationary);
-				}
-
+				_ => {},
 			}
 		}
 		bat_1.move_bat();
