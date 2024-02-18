@@ -66,7 +66,11 @@ fn main() {
 			bat_1.move_bat(SCREEN_SIZE);
 			bat_2.move_bat(SCREEN_SIZE);
 			ball.move_ball();
-			println!("{:?}", ball.test_collision(&bat_1, &bat_2, SCREEN_SIZE));
+			match ball.test_collision(&bat_1, &bat_2, SCREEN_SIZE) {
+				Collision::LeftSide => {bat_2.increase_score();println!("Score: {} - {}", bat_1.get_score(), bat_2.get_score());},
+				Collision::RightSide => {bat_1.increase_score();println!("Score: {} - {}", bat_1.get_score(), bat_2.get_score());},
+				_ => (),
+			}
 			now = SystemTime::now();
 		}
 		// Draw the game objects

@@ -8,6 +8,7 @@ pub enum Direction {
 pub struct Bat {
 	position: [i32; 2],
 	size: [i32; 2],
+	score: i32,
 	direction: Direction,
 	colour: sdl2::pixels::Color,
 }
@@ -17,6 +18,7 @@ impl Bat {
 		Bat {
 			position,
 			size,
+			score: 0,
 			direction: Direction::Stationary,
 			colour,
 		}
@@ -55,8 +57,13 @@ impl Bat {
 	pub fn get_colour(&self) -> sdl2::pixels::Color {
 		self.colour
 	}
-
 	pub fn get_size(&self) -> [i32; 2] {
 		self.size
+	}
+	pub fn get_score(&self) -> i32 {
+		self.score
+	}
+	pub fn increase_score(&mut self) {
+		self.score += 1;
 	}
 }

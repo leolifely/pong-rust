@@ -2,8 +2,9 @@
 pub enum Collision {
 	Bat,
 	TopBottom,
-	Side,
-	None
+	LeftSide,
+	RightSide,
+	None,
 }
 
 pub struct Ball {
@@ -60,10 +61,15 @@ impl Ball {
 			}
 		}
 		// Check for collisions with the sides of the screen
-		if self.position[0] <= 0 || self.position[0] >= screen_size[0] - ball_size {
+		if self.position[0] <= 0 {
 			self.position = [screen_size[0] / 2, screen_size[1] / 2];
 			self.velocity = [1, 1];
-			return Collision::Side;
+			return Collision::LeftSide;
+		}
+		if self.position[0] >= screen_size[0] - ball_size {
+			self.position = [screen_size[0] / 2, screen_size[1] / 2];
+			self.velocity = [-1, -1];
+			return Collision::RightSide;
 		}
 		Collision::None
 	}
