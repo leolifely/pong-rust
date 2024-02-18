@@ -10,7 +10,6 @@ pub enum Collision {
 pub struct Ball {
 	position: [i32; 2],
 	velocity: [i32; 2],
-	collision: Collision,
 	colour: sdl2::pixels::Color,
 }
 
@@ -19,7 +18,6 @@ impl Ball {
 		Ball {
 			position,
 			velocity,
-			collision: Collision::None,
 			colour,
 		}
 	}

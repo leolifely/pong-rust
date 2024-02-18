@@ -1,11 +1,12 @@
 mod bat;
 mod ball;
 
+use std::path::Path;
 use bat::{Bat, Direction};
 use ball::{Ball, Collision};
 extern crate sdl2;
-use sdl2::{pixels::Color, event::Event, keyboard::Keycode};
-use std::time::{Duration, SystemTime};
+use sdl2::{pixels::Color, event::Event, keyboard::Keycode, ttf};
+use std::time::SystemTime;
 
 const SCREEN_SIZE: [i32; 2] = [1280, 720];
 
@@ -77,8 +78,41 @@ fn main() {
 		bat_1.draw(&mut canvas);
 		bat_2.draw(&mut canvas);
 		ball.draw(&mut canvas);
+		draw_scores(bat_1.get_score(), bat_2.get_score(), &mut canvas, SCREEN_SIZE);
 		canvas.present();
 		canvas.set_draw_color(Color::RGB(0, 0, 0));
 		canvas.clear();
 	}
+}
+
+fn draw_scores(score_1: i32, score_2: i32, canvas: &mut sdl2::render::Canvas<sdl2::video::Window>, screen_size: [i32; 2]) {
+	let font_path: &Path = Path::new("font/7_seg.ttf");
+	let texture_creator = canvas.texture_creator();
+	let ttf_context = ttf::init().unwrap();
+	let font = ttf_context.load_font(font_path, 128).unwrap();
+
+
+	let surface_1 = font.render(format!("{}", score_1).as_str())
+		.blended(Color::RGBA(0, 255, 0, 255))
+		.unwrap();
+	let texture_1 = texture_creator.create_texture_from_surface(&surface_1).unwrap();
+	canvas.copy(&texture_1, None, sdl2::rect::Rect::new(
+		screen_size[0] / 2 - 200,
+		25,
+		50 * format!("{}",
+					 score_1).as_str().len() as u32,
+		100
+	)).unwrap();
+
+	let surface_2 = font.render(format!("{}", score_2).as_str())
+		.blended(Color::RGBA(0, 255, 0, 255))
+		.unwrap();
+	let texture_2 = texture_creator.create_texture_from_surface(&surface_2).unwrap();
+	canvas.copy(&texture_2, None, sdl2::rect::Rect::new(
+		screen_size[0] / 2 + 200,
+		25,
+		50 * format!("{}",
+					 score_2).as_str().len() as u32,
+		100
+	)).unwrap();
 }
