@@ -76,7 +76,7 @@ fn main() {
 			now = SystemTime::now();
 		}
 		// Draw the game objects
-		bat_1.update_color(SCREEN_SIZE, ball.get_position());;
+		bat_1.update_color(SCREEN_SIZE, ball.get_position());
 		bat_1.draw(&mut canvas);
 		bat_2.update_color(SCREEN_SIZE, ball.get_position());
 		bat_2.draw(&mut canvas);
