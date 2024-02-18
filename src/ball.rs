@@ -27,6 +27,12 @@ impl Ball {
 		self.position[0] += self.velocity[0];
 		self.position[1] += self.velocity[1];
 	}
+	pub fn update_color(&mut self, screen_size: [i32; 2]) {
+		let r = (self.position[0] as f32 / screen_size[0] as f32 * 255.0) as u8;
+		let g = (self.position[1] as f32 / screen_size[1] as f32 * 255.0) as u8;
+		let b = 255 - r.max(g);
+		self.colour = sdl2::pixels::Color::RGB(r, g, b);
+	}
 
 	pub fn draw(&self, canvas: &mut sdl2::render::Canvas<sdl2::video::Window>) {
 		canvas.set_draw_color(self.colour);
@@ -70,6 +76,9 @@ impl Ball {
 			return Collision::RightSide;
 		}
 		Collision::None
+	}
+	pub fn get_position(&self) -> [i32; 2] {
+		self.position
 	}
 
 }

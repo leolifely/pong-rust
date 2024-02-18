@@ -67,6 +67,7 @@ fn main() {
 			bat_1.move_bat(SCREEN_SIZE);
 			bat_2.move_bat(SCREEN_SIZE);
 			ball.move_ball();
+			ball.update_color(SCREEN_SIZE);
 			match ball.test_collision(&bat_1, &bat_2, SCREEN_SIZE) {
 				Collision::LeftSide => {bat_2.increase_score();println!("Score: {} - {}", bat_1.get_score(), bat_2.get_score());},
 				Collision::RightSide => {bat_1.increase_score();println!("Score: {} - {}", bat_1.get_score(), bat_2.get_score());},
@@ -75,7 +76,9 @@ fn main() {
 			now = SystemTime::now();
 		}
 		// Draw the game objects
+		bat_1.update_color(SCREEN_SIZE, ball.get_position());;
 		bat_1.draw(&mut canvas);
+		bat_2.update_color(SCREEN_SIZE, ball.get_position());
 		bat_2.draw(&mut canvas);
 		ball.draw(&mut canvas);
 		draw_scores(bat_1.get_score(), bat_2.get_score(), &mut canvas, SCREEN_SIZE);
@@ -91,28 +94,12 @@ fn draw_scores(score_1: i32, score_2: i32, canvas: &mut sdl2::render::Canvas<sdl
 	let ttf_context = ttf::init().unwrap();
 	let font = ttf_context.load_font(font_path, 128).unwrap();
 
-
-	let surface_1 = font.render(format!("{}", score_1).as_str())
-		.blended(Color::RGBA(0, 255, 0, 255))
-		.unwrap();
+	let surface_1 = font.render(&score_1.to_string()).blended(Color::RGBA(0, 255, 0, 255)).unwrap();
 	let texture_1 = texture_creator.create_texture_from_surface(&surface_1).unwrap();
-	canvas.copy(&texture_1, None, sdl2::rect::Rect::new(
-		screen_size[0] / 2 - 200,
-		25,
-		50 * format!("{}",
-					 score_1).as_str().len() as u32,
-		100
-	)).unwrap();
+	canvas.copy(&texture_1, None, sdl2::rect::Rect::new(screen_size[0] / 2 - 200, 25, 50 * score_1.to_string().len() as u32, 100)).unwrap();
 
-	let surface_2 = font.render(format!("{}", score_2).as_str())
-		.blended(Color::RGBA(0, 255, 0, 255))
-		.unwrap();
+	let surface_2 = font.render(&score_2.to_string()).blended(Color::RGBA(0, 255, 0, 255)).unwrap();
 	let texture_2 = texture_creator.create_texture_from_surface(&surface_2).unwrap();
-	canvas.copy(&texture_2, None, sdl2::rect::Rect::new(
-		screen_size[0] / 2 + 200,
-		25,
-		50 * format!("{}",
-					 score_2).as_str().len() as u32,
-		100
-	)).unwrap();
+	canvas.copy(&texture_2, None, sdl2::rect::Rect::new(screen_size[0] / 2 + 200, 25, 50 * score_2.to_string().len() as u32, 100)).unwrap();
+
 }

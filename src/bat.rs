@@ -44,6 +44,12 @@ impl Bat {
 		}
 	}
 
+	pub fn update_color(&mut self, screen_size: [i32; 2], ball_position: [i32; 2]) {
+		let g = (self.position[1] as f32 / screen_size[1] as f32 * 255.0) as u8;
+		let r = (ball_position[0] as f32 / screen_size[0] as f32 * 255.0) as u8;
+		let b = (ball_position[1] as f32 / screen_size[1] as f32 * 255.0) as u8;
+		self.colour = sdl2::pixels::Color::RGB(r, g, b);
+	}
 	pub fn draw(&self, canvas: &mut sdl2::render::Canvas<sdl2::video::Window>) {
 		canvas.set_draw_color(self.colour);
 		// Create a rectangle and fill it with the bat's colour
@@ -53,9 +59,6 @@ impl Bat {
 
 	pub fn get_position(&self) -> [i32; 2] {
 		self.position
-	}
-	pub fn get_colour(&self) -> sdl2::pixels::Color {
-		self.colour
 	}
 	pub fn get_size(&self) -> [i32; 2] {
 		self.size
