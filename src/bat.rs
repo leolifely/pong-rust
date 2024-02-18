@@ -26,16 +26,25 @@ impl Bat {
 		self.direction = direction;
 	}
 
-	pub fn move_bat(&mut self) {
+	pub fn move_bat(&mut self, screen_size: [i32; 2]) {
+		// Stop the bat from moving off the screen
+		if self.position[1] <= 0 && self.direction == Direction::Up {
+			self.direction = Direction::Stationary;
+		}
+		if self.position[1] >= screen_size[1] - self.size[1] && self.direction == Direction::Down {
+			self.direction = Direction::Stationary;
+		}
+		// Move the bat depending on self.direction
 		match self.direction {
-			Direction::Up => self.position[1] -= 1,
-			Direction::Down => self.position[1] += 1,
+			Direction::Up => self.position[1] -= 2,
+			Direction::Down => self.position[1] += 2,
 			Direction::Stationary => (),
 		}
 	}
 
 	pub fn draw(&self, canvas: &mut sdl2::render::Canvas<sdl2::video::Window>) {
 		canvas.set_draw_color(self.colour);
+		// Create a rectangle and fill it with the bat's colour
 		let bat_rect = sdl2::rect::Rect::new(self.position[0], self.position[1], self.size[0] as u32, self.size[1] as u32);
 		canvas.fill_rect(bat_rect).unwrap();
 	}
@@ -45,5 +54,9 @@ impl Bat {
 	}
 	pub fn get_colour(&self) -> sdl2::pixels::Color {
 		self.colour
+	}
+
+	pub fn get_size(&self) -> [i32; 2] {
+		self.size
 	}
 }

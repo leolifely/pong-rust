@@ -10,6 +10,7 @@ use std::time::{Duration, SystemTime};
 const SCREEN_SIZE: [i32; 2] = [1280, 720];
 
 fn main() {
+	// Set up the window and the canvas
 	let sdl_context = sdl2::init().unwrap();
 	let video_subsystem = sdl_context.video().unwrap();
 
@@ -23,13 +24,17 @@ fn main() {
 	canvas.clear();
 	canvas.present();
 
+	// Set up the event pump
 	let mut event_pump = sdl_context.event_pump().unwrap();
+	// Set up the game objects
 	let mut bat_1 = Bat::new([50, 25], [25, 100], Color::RGB(0, 255, 0));
 	let mut bat_2 = Bat::new([SCREEN_SIZE[0] - 75, 25], [25, 100], Color::RGB(255, 255, 255));
-	let mut ball = Ball::new([SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2], [1, 0], Color::RGB(255, 255, 0));
+	let mut ball = Ball::new([SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2], [1, 1], Color::RGB(255, 255, 0));
 
+	// Main game loop
 	let mut now = SystemTime::now();
 	'running: loop {
+		// Handle events
 		for event in event_pump.poll_iter() {
 			match event {
 				Event::Quit {..} => {
@@ -56,14 +61,15 @@ fn main() {
 				_ => {},
 			}
 		}
+		// Move the game objects
 		if now.elapsed().unwrap().as_millis() > 1 {
-			bat_1.move_bat();
-			bat_2.move_bat();
+			bat_1.move_bat(SCREEN_SIZE);
+			bat_2.move_bat(SCREEN_SIZE);
 			ball.move_ball();
 			println!("{:?}", ball.test_collision(&bat_1, &bat_2, SCREEN_SIZE));
 			now = SystemTime::now();
 		}
-
+		// Draw the game objects
 		bat_1.draw(&mut canvas);
 		bat_2.draw(&mut canvas);
 		ball.draw(&mut canvas);
